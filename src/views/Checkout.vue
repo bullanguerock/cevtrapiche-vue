@@ -24,7 +24,7 @@
                             <td>{{ item.product.name }}</td>
                             <td>${{ item.product.price }}</td>
                             <td>{{ item.quantity }}</td>
-                            <td>${{ getItemTotal(item).toFixed(2) }}</td>
+                            <td>${{ getItemTotal(item) }}</td>
                         </tr>
                     </tbody>
 
@@ -32,7 +32,7 @@
                         <tr>
                             <td colspan="2">Total</td>
                             <td>{{ cartTotalLength }}</td>
-                            <td>${{ cartTotalPrice.toFixed(2) }}</td>
+                            <td>${{ cartTotalPrice }}</td>
                         </tr>
                     </tfoot>
                 </table>
@@ -177,6 +177,8 @@ export default {
 
         async stripeTokenHandler() {
             this.$store.commit('setIsLoading', true)
+           
+            /*Items del carro */
             const items = []
             for (let i = 0; i < this.cart.items.length; i++) {
                 const item = this.cart.items[i]
@@ -197,15 +199,13 @@ export default {
                 'phone': this.phone,
                 'items': items,             
             }
-
-            
+                
+            /* Pasando info al back y recibiendo la url de pago */
             await axios
                 .post('/api/v1/checkout/', data)
-                .then(response => {
-                    /*this.$store.commit('clearCart')*/
-                    /*this.$router.push(response.data)*/
+                .then(response => {                    
+                    /* Redirigiendo a url de pago */
                     window.location.href = response.data
-                    console.log(response.data)
                     
                 })
                 .catch(error => {

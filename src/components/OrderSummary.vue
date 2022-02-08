@@ -22,20 +22,34 @@
                     <td>{{ item.product.name }}</td>
                     <td>${{ item.product.price }}</td>
                     <td>{{ item.quantity }}</td>
-                    <td>${{ getItemTotal(item).toFixed(2) }}</td>
+                    <td>${{ getItemTotal(item) }}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td v-bind:key="order"><strong>${{ cartTotalPrice(order).toLocaleString() }}</strong></td>
+                    <td v-bind:key="order">{{ order.status }}</td>
                 </tr>
             </tbody>
+            
         </table>
     </div>
 </template>
 
 <script>
+import axios from 'axios'
 export default {
     name: 'OrderSummary',
     props: {
         order: Object
     },
     methods: {
+        cartTotalPrice(order) {
+            return order.items.reduce((acc, curVal) => {
+                return acc += curVal.product.price * curVal.quantity
+            }, 0)
+        },
         getItemTotal(item) {
             return item.quantity * item.product.price
         },

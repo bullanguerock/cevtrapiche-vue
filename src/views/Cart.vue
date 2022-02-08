@@ -12,6 +12,7 @@
                             <th>Product</th>
                             <th>Price</th>
                             <th>Quantity</th>
+                            <th>Stock</th>
                             <th>Total</th>
                             <th></th>
                         </tr>
@@ -32,11 +33,14 @@
             <div class="column is-12 box">
                 <h2 class="subtitle">Summary</h2>
 
-                <strong>${{ cartTotalPrice.toFixed(2) }}</strong>, {{ cartTotalLength }} items
+                <strong>${{ cartTotalPrice }}</strong>, {{ cartTotalLength }} items
 
                 <hr>
 
-                <router-link to="/cart/checkout" class="button is-dark">Proceed to checkout</router-link>
+                <router-link to="/cart/checkout" class="button is-dark">Checkout</router-link>
+                <br>
+
+                <router-link to="/cart" class="button is-dark" @click="inventoryReservation">Test inventory</router-link>
             </div>
         </div>
     </div>
@@ -53,7 +57,7 @@ export default {
     data() {
         return {
             cart: {
-                items: []
+                items: [],
             }
         }
     },
@@ -63,7 +67,60 @@ export default {
     methods: {
         removeFromCart(item) {
             this.cart.items = this.cart.items.filter(i => i.product.id !== item.product.id)
-        }
+        },
+        inventoryReservation(){
+            this.$store.commit('setIsLoading', true)
+
+            let ite = this.cart.items
+            
+            /* Por cada item checkea y reserva inventario */    
+            for (let [key, value] of Object.entries(ite)){
+
+                let url = value.product.get_absolute_url
+                
+                /* checkeo de inventario*/
+                let inven = 0
+                axios
+                .get(`/api/v1/products${url}`)
+                .then(response => {
+                    inven = response.data.inventory
+
+                    /* reserva inventario */
+                    let inventoryNew = null
+                    if (value.quantity <= inven){
+                        /* calculeishon */
+                        inventoryNew = inven - value.quantity
+
+                        const data = {
+                            "id": value.product.id,
+                            "name": value.product.name,
+                            "inventory": inventoryNew
+                        }
+
+                    
+                        axios
+                        .put(`/api/v1/product/update/${value.product.id}/`, data)
+                        .then(response => {
+                            console.log(response.data)                          
+                        })
+                        .catch(error => {
+                            
+                            console.log(error) 
+                        })
+
+                    } else {
+                        console.log('No hay suficiente stock')
+                    }                   
+  
+
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+                
+                this.$store.commit('setIsLoading', false)
+            }
+        }       
     },
     computed: {
         cartTotalLength() {

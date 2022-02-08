@@ -16,15 +16,38 @@
 
                 <p><strong>Price: </strong>${{ product.price }}</p>
 
-                <div class="field has-addons mt-6">
-                    <div class="control">
-                        <input type="number" class="input" min="1" v-model="quantity">
-                    </div>
+                <p><strong>Inventory: </strong>{{ product.inventory }}</p>
 
-                    <div class="control">
-                        <a class="button is-dark" @click="addToCart">Add to cart</a>
+                <div v-if="product.inventory">
+
+                    <div class="field has-addons mt-6">
+                        <div class="control">
+                            <input type="number" class="input" min="1" v-bind:max="product.inventory" v-model="quantity">
+                        </div>                        
+                        
+                        <div class="control">
+                            <a class="button is-dark" @click="addToCart">Add to cart</a>
+                        </div>
+
                     </div>
                 </div>
+                <div v-else>
+                    <div class="field has-addons mt-6">
+                        <div class="control">
+                            <input type="number" disabled class="input" min="0" v-bind:max="product.inventory" value="0">
+                        </div>                        
+                        
+                        <div class="control">
+                            <a class="button" disabled>Add to cart</a>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                
+
+
             </div>
         </div>
     </div>

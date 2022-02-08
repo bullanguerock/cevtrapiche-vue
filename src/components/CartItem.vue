@@ -7,23 +7,47 @@
             <a @click="decrementQuantity(item)">-</a>
             <a @click="incrementQuantity(item)">+</a>
         </td>
-        <td>${{ getItemTotal(item).toFixed(2) }}</td>
+        <td>{{ item.product.inventory }}</td>
+        <td>${{ getItemTotal(item) }}</td>
         <td><button class="delete" @click="removeFromCart(item)"></button></td>
     </tr>
 </template>
 
 <script>
+import axios from 'axios'
 export default {
+    
     name: 'CartItem',
     props: {
         initialItem: Object
     },
     data() {
         return {
-            item: this.initialItem
+            item: this.initialItem,
+            stockCounter: null
         }
     },
     methods: {
+        testInterval() {
+            this.stockCounter = setInterval(() => {
+                this.getStock()
+            }, 10000)
+        },
+        async getStock() {
+            const url = this.item.product.get_absolute_url
+            
+            await axios
+                .get(`/api/v1/products${url}`)
+                .then(response => {
+                    this.item.product.inventory = response.data.inventory 
+
+                })
+                .catch(error => {
+                    return console.log(error)
+                })
+            
+            
+        },
         getItemTotal(item) {
             return item.quantity * item.product.price
         },
@@ -35,8 +59,10 @@ export default {
             this.updateCart()
         },
         incrementQuantity(item) {
-            item.quantity += 1
-            this.updateCart()
+            if (item.quantity < item.product.inventory){
+                item.quantity += 1
+                this.updateCart()
+            }
         },
         updateCart() {
             localStorage.setItem('cart', JSON.stringify(this.$store.state.cart))
@@ -46,5 +72,13 @@ export default {
             this.updateCart()
         },
     },
+    beforeMount(){
+        this.testInterval()        
+    },
+    beforeRouteLeave (to, from, next) {
+        if(this.stockCounter)
+            clearInterval(this.stockCounter);
+        next();
+    },  
 }
 </script>
