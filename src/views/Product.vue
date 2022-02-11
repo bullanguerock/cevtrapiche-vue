@@ -57,16 +57,18 @@
 import axios from 'axios'
 import { toast } from 'bulma-toast'
 
+
 export default {
     name: 'Product',
     data() {
         return {
             product: {},
-            quantity: 1
+            quantity: 1,
+            stock: false,
         }
     },
     mounted() {
-        this.getProduct() 
+        this.getProduct()
     },
     methods: {
         async getProduct() {
@@ -89,26 +91,42 @@ export default {
             this.$store.commit('setIsLoading', false)
         },
         addToCart() {
-            if (isNaN(this.quantity) || this.quantity < 1) {
-                this.quantity = 1
+            console.log(this.product.inventory)
+            if (this.product.inventory >= this.quantity){
+                if (isNaN(this.quantity) || this.quantity < 1) {
+                    this.quantity = 1
+                }
+
+                const item = {
+                    product: this.product,
+                    quantity: this.quantity
+                }
+
+                this.$store.commit('addToCart', item)
+
+                this.product.inventory = this.product.inventory - this.quantity
+
+                toast({
+                    message: 'The product was added to the cart',
+                    type: 'is-success',
+                    dismissible: true,
+                    pauseOnHover: true,
+                    duration: 2000,
+                    position: 'bottom-right',
+                })
             }
+            else {
+                toast({
+                    message: 'No hay stock suficiente',
+                    type: 'is-danger',
+                    dismissible: true,
+                    pauseOnHover: true,
+                    duration: 2000,
+                    position: 'bottom-right',
+                })
 
-            const item = {
-                product: this.product,
-                quantity: this.quantity
             }
-
-            this.$store.commit('addToCart', item)
-
-            toast({
-                message: 'The product was added to the cart',
-                type: 'is-success',
-                dismissible: true,
-                pauseOnHover: true,
-                duration: 2000,
-                position: 'bottom-right',
-            })
         }
-    }
+    },
 }
 </script>

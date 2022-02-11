@@ -36,11 +36,16 @@
                 <strong>${{ cartTotalPrice }}</strong>, {{ cartTotalLength }} items
 
                 <hr>
-
-                <router-link to="/cart/checkout" class="button is-dark">Checkout</router-link>
-                <br>
-
-                <router-link to="/cart" class="button is-dark" @click="inventoryReservation">Test inventory</router-link>
+                <div v-if="cartTotalLength>0">
+                    <div v-if="stock"> 
+                        <div @click="inventoryReservation" class="button is-dark">Checkout</div>
+                    </div>
+                    <div v-else> 
+                        <div class="button is-danger">Un item sin stock</div>
+                        <div class="button is-dark" @click="inventoryReservation">Intentar denuvo</div>
+                    </div>
+                </div>
+                    
             </div>
         </div>
     </div>
@@ -58,11 +63,14 @@ export default {
         return {
             cart: {
                 items: [],
-            }
+            },
+            stock: true,
         }
     },
     mounted() {
         this.cart = this.$store.state.cart
+
+        document.title = 'Carro | Cervezas Artesanales'
     },
     methods: {
         removeFromCart(item) {
@@ -101,7 +109,9 @@ export default {
                         axios
                         .put(`/api/v1/product/update/${value.product.id}/`, data)
                         .then(response => {
-                            console.log(response.data)                          
+                            
+                            this.$router.push('/cart/checkout')                            
+                            return this.stock = true                             
                         })
                         .catch(error => {
                             
@@ -110,6 +120,7 @@ export default {
 
                     } else {
                         console.log('No hay suficiente stock')
+                        return this.stock = false
                     }                   
   
 

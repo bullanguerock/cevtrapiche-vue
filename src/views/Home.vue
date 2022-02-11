@@ -1,27 +1,49 @@
 <template>
- <div class="home">
-   <!--
-    <section class="hero is-medium is-dark mb-6">
-        <div class="hero-body has-text-centered">
-            <p class="title mb-6">
-                Mercado de cerveza artesanal
-            </p>
-            <p class="subtitle">
-                (slider?)
-            </p>
-        </div>
-    </section>
-    -->
-
-    <div class="columns is-multiline">
+  <!-- HERO -->
+  <section class="hero is-black is-fullheight">
+    <!-- Hero content: will be in the middle -->
+    <div class="hero-body">
+      <div class="container has-text-centered">
+        <p class="title">
+          Se vienen cositas
+        </p>
+        <p class="subtitle">
+          *.*
+        </p>
+      </div>
+    </div>    
+    
+  </section>
+    
+  <div class="home">  
+    <div class="columns is-multiline is-centered">
       <div class="column is-12">
-          <h2 class="is-size-5 has-text-centered">Novedades</h2>
+          <h2 class="is-size-5 has-text-centered">Hot</h2>
       </div>
 
-      <ProductBox 
-        v-for="product in latestProducts"
-        v-bind:key="product.id"
-        v-bind:product="product" />
+        <ProductBox 
+          v-for="product in latestProducts"
+          v-bind:key="product.id"
+          v-bind:product="product" />
+      
+      <div class="column is-12">
+          <h2 class="is-size-5 has-text-centered">Promociones</h2>
+      </div>
+
+        <ProductBox 
+          v-for="product in latestProducts"
+          v-bind:key="product.id"
+          v-bind:product="product" />
+      
+      <div class="column is-12">
+          <h2 class="is-size-5 has-text-centered">Recien llegados</h2>
+      </div>
+
+        <ProductBox 
+          v-for="product in latestProducts"
+          v-bind:key="product.id"
+          v-bind:product="product" />
+
     
     </div>
   </div>
@@ -44,8 +66,7 @@ export default {
   },
   mounted() {
     this.getLatestProducts()
-
-    document.title = 'Home | Dbeers'
+    document.title = 'Home | Cervezas Artesanales'
   },
   methods: {
     async getLatestProducts() {
@@ -66,3 +87,8 @@ export default {
 }
 </script>
 
+<style lang="scss" scoped>
+.section {
+  padding: 0px;
+}
+</style>

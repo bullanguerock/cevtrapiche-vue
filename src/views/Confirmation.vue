@@ -34,7 +34,7 @@ export default {
         const stat = this.checkStatus(this.flow_token).then(results => {
             console.log(results.status_order)
             this.status_order = results.status_order.status
-            this.orderid = results.status_order.commerceOrder/8
+            this.orderid = results.status_order.commerceOrder/500
             this.redirect(this.status_order)                          
         }).catch(error => {
             console.log(error)
@@ -71,7 +71,7 @@ export default {
             } else if (stat == '3') /* rechazada */{
 
                 /* update db order status */
-                this.updateOrderStatus('rechazada')
+                /*celery doing it       this.updateOrderStatus('rechazada')*/ 
 
                 this.$store.commit('setIsLoading', false)
                 return this.$router.push('/cart/fail')
@@ -80,7 +80,7 @@ export default {
             } else if (stat == '4') /* anulada */ {
 
                 /* update db order status */
-                this.updateOrderStatus('anulada')
+                /*celery doing it       this.updateOrderStatus('anulada')*/
     
                 this.$store.commit('setIsLoading', false)
                 return this.$router.push('/cart/fail')              

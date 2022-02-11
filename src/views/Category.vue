@@ -35,6 +35,8 @@ export default {
     },
     mounted() {
         this.getCategory()
+
+        document.title = 'Categorias | Cervezas Artesanales'
     },
     watch: {
         $route(to, from) {
