@@ -15,7 +15,7 @@ $beige-lighter: #EFF0EB;
 $family-sans-serif: "Nunito", sans-serif;
 $grey-dark: $brown;
 $grey-light: $beige-light;
-$primary: $purple;
+$primary: #0a0a0a;
 $link: $pink;
 
 
@@ -35,6 +35,3 @@ $input-shadow: none;
 @import "node_modules/bulma/sass/components/navbar.sass";
 @import "node_modules/bulma/sass/layout/hero.sass";
 @import "node_modules/bulma/sass/layout/section.sass";
-
-// Bulma Import
-@import '~bulma';

@@ -1,58 +1,63 @@
 <template>
-  <!-- HERO -->
-  <section class="hero is-black is-fullheight">
-    <!-- Hero content: will be in the middle -->
-    <div class="hero-body">
-      <div class="container has-text-centered">
-        <p class="title">
-          Se vienen cositas
-        </p>
-        <p class="subtitle">
-          *.*
-        </p>
-      </div>
-    </div>    
+  <div style="width: 100%; margin: auto; background-color: #0a0a0a;">
+    <Slider/>
+  </div>  
     
-  </section>
-    
-  <div class="home">  
-    <div class="columns is-multiline is-centered">
-      <div class="column is-12">
-          <h2 class="is-size-5 has-text-centered">Hot</h2>
-      </div>
+  <div class="home" style="padding-bottom: 5%;">  
+    <div class="columns is-multiline is-centered is-align-items-self-end">
 
-        <ProductBox 
-          v-for="product in latestProducts"
-          v-bind:key="product.id"
-          v-bind:product="product" />
+      <div class="column is-12">
+          <h2 class="is-size-1 has-text-centered ">Slider Test</h2>
+      </div>
+      
+        <ProductSlider 
+          v-bind:items="latestProducts"/>
+
+      <div class="column is-12">
+          <h2 class="is-size-1 has-text-centered">Popular</h2>
+      </div>
+      
+        <ProductSlider 
+          v-bind:items="latestProducts"/>
       
       <div class="column is-12">
-          <h2 class="is-size-5 has-text-centered">Promociones</h2>
+          <h2 class="is-size-1 has-text-centered">Promociones</h2>
       </div>
 
-        <ProductBox 
-          v-for="product in latestProducts"
-          v-bind:key="product.id"
-          v-bind:product="product" />
+        <ProductSlider 
+          v-bind:items="latestProducts"/>
       
       <div class="column is-12">
-          <h2 class="is-size-5 has-text-centered">Recien llegados</h2>
+          <h2 class="is-size-1 has-text-centered">Recien llegados</h2>
       </div>
 
         <ProductBox 
           v-for="product in latestProducts"
           v-bind:key="product.id"
-          v-bind:product="product" />
+          v-bind:product="product" 
+        />
 
     
     </div>
+
+      <div class="column is-12">
+      <h2 class="is-size-1 has-text-centered">Cervecerias</h2>
+    </div>
+    <div style="width: 100%; margin: auto; padding:2% 15% 5% 15%;">
+      <BrandSlider/>
+    </div> 
   </div>
+
+  
 </template>
 
 <script>
 import axios from 'axios'
 
 import ProductBox from '@/components/ProductBox'
+import Slider from '@/components/Slider'
+import BrandSlider from '@/components/BrandSlider'
+import ProductSlider from '@/components/ProductSlider'
 
 export default {
   name: 'Home',
@@ -62,7 +67,10 @@ export default {
     }
   },
   components: {
-    ProductBox
+    ProductBox,
+    Slider,
+    BrandSlider,
+    ProductSlider,
   },
   mounted() {
     this.getLatestProducts()
@@ -76,6 +84,7 @@ export default {
         .get('/api/v1/latest-products/')
         .then(response => {
           this.latestProducts = response.data
+          return response.data
         })
         .catch(error => {
           console.log(error)
@@ -87,8 +96,14 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.section {
-  padding: 0px;
+<style scoped>
+
+h2 {
+    color: #9c760e;
 }
+
+.home{
+  background-color: rgb(224, 223, 208);
+}
+
 </style>
