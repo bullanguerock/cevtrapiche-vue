@@ -1,49 +1,48 @@
 <template>
     <div class="page-product">
         <div class="columns is-multiline">
-            <div class="column is-9">
+            <div class="column">
                 <figure class="image mb-6">
                     <img v-bind:src="product.get_image">
                 </figure>
-
-                <h1 class="title">{{ product.name }}</h1>
-
-                <p>{{ product.description }}</p>
             </div>
 
-            <div class="column is-3">
-                <h2 class="subtitle">Information</h2>
+            <div class="column">
+                <div class="p-info has-text-centered">
+                
+                    <h1 class="title" style="color: #9c760e;">{{ product.name }}</h1>
+                    <p>{{ product.description }}</p>
 
-                <p><strong>Price: </strong>${{ product.price }}</p>
+                    <p><strong>Precio </strong> ${{ product.price }}</p>
 
-                <p><strong>Inventory: </strong>{{ product.inventory }}</p>
+                    <p><strong>Inventario </strong>{{ product.inventory }}</p>
 
-                <div v-if="product.inventory">
+                    <div v-if="product.inventory">
+                        <div class="field has-addons mt-6">
+                            <div class="control">
+                                <input type="number" class="input is-medium" min="1" v-bind:max="product.inventory" v-model="quantity">
+                            </div>                        
+                            
+                            <div class="control">
+                                <a class="button is-dark" @click="addToCart"><span class="icon" style="margin-right: .5rem;"><i class="fas fa-shopping-cart"></i></span> Agregar al carro</a>
+                            </div>
 
-                    <div class="field has-addons mt-6">
-                        <div class="control">
-                            <input type="number" class="input" min="1" v-bind:max="product.inventory" v-model="quantity">
-                        </div>                        
-                        
-                        <div class="control">
-                            <a class="button is-dark" @click="addToCart">Add to cart</a>
                         </div>
-
                     </div>
-                </div>
-                <div v-else>
-                    <div class="field has-addons mt-6">
-                        <div class="control">
-                            <input type="number" disabled class="input" min="0" v-bind:max="product.inventory" value="0">
-                        </div>                        
-                        
-                        <div class="control">
-                            <a class="button" disabled>Add to cart</a>
+                    <div v-else>
+                        <div class="field has-addons mt-6">
+                            <div class="control">
+                                <input type="number" disabled class="input is-medium" min="0" v-bind:max="product.inventory" value="0">
+                            </div>                        
+                            
+                            <div class="control">
+                                <a class="button" disabled>Add to cart</a>
+                            </div>
+
                         </div>
-
                     </div>
-                </div>
 
+                </div>
 
                 
 
@@ -130,3 +129,56 @@ export default {
     },
 }
 </script>
+<style scoped>
+img {
+    position: relative;
+    margin: auto;
+    padding: 1rem;
+    max-height: 50vh;
+    width: auto;
+}
+.column {
+    justify-content: center;
+    align-self: center;
+    align-items: center;
+}
+.p-info{
+    position: relative;
+    max-height: auto;
+    margin: 1rem;
+    padding: 1rem;
+    
+}
+.p-info {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+.p-info::after {
+  content: '';
+  content: "";
+  border-radius: 5px;
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+/* Scale up the box */
+.p-info:hover {
+  -webkit-transform: scale(1.01, 1.01);
+  transform: scale(1.01, 1.01);
+}
+
+.p-info:hover::after {
+    opacity: 1;
+}.field.has-addons {
+    justify-content: center;
+}
+</style>

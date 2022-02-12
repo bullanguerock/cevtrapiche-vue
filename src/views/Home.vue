@@ -7,23 +7,17 @@
     <div class="columns is-multiline is-centered is-align-items-self-end">
 
       <div class="column is-12">
-          <h2 class="is-size-1 has-text-centered ">Slider Test</h2>
+          <h2 class="is-size-1 has-text-centered ">Hot
+          </h2>
       </div>
       
         <ProductSlider 
           v-bind:items="latestProducts"/>
 
       <div class="column is-12">
-          <h2 class="is-size-1 has-text-centered">Popular</h2>
+          <h2 class="is-size-1 has-text-centered">Promos</h2>
       </div>
       
-        <ProductSlider 
-          v-bind:items="latestProducts"/>
-      
-      <div class="column is-12">
-          <h2 class="is-size-1 has-text-centered">Promociones</h2>
-      </div>
-
         <ProductSlider 
           v-bind:items="latestProducts"/>
       
@@ -31,11 +25,8 @@
           <h2 class="is-size-1 has-text-centered">Recien llegados</h2>
       </div>
 
-        <ProductBox 
-          v-for="product in latestProducts"
-          v-bind:key="product.id"
-          v-bind:product="product" 
-        />
+        <ProductSlider 
+          v-bind:items="latestProducts"/>
 
     
     </div>
